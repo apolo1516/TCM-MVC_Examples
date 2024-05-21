@@ -5,9 +5,9 @@ public class FireWeaponComponent : MonoBehaviour
 {
     //All params and data will exist in here!
     [SerializeField]
-    FireWeaponDefinition WeaponDefinition;
+    public FireWeaponDefinition WeaponDefinition;
 
-    //In this case I consider the input weapon independant but we can add those inside the data definition
+    //In this case I consider the input weapon independent but we can add those inside the data definition
     [SerializeField]
     string ReloadInputAxis = "Reload";
     [SerializeField]
@@ -22,11 +22,16 @@ public class FireWeaponComponent : MonoBehaviour
     private int remainingBullets = 0;
     private bool bIsReloading = false;
 
+    public int RemainingBullets
+    {
+        get { return remainingBullets; }
+    }
+
     void Awake()
     {
         //This will throw an error message if the condition isn't meet
         Debug.Assert(WeaponDefinition != null, "Fire weapon definition is missing!", this);
-       
+
         if (WeaponDefinition == null)
         {
             //If we dont have a config file deactivate this component to avoid breaking the game
@@ -42,7 +47,7 @@ public class FireWeaponComponent : MonoBehaviour
         //We always want to update the weapon fire cooldown
         ElapsedFireCooldown += Time.deltaTime * Time.timeScale;
 
-        if(!bIsReloading)
+        if (!bIsReloading)
         {
             if (Input.GetButton(FireInputAxis) && ElapsedFireCooldown >= WeaponDefinition.FireCooldown && remainingBullets > 0)
             {
@@ -55,8 +60,8 @@ public class FireWeaponComponent : MonoBehaviour
                 //Invoke Delegates
                 OnReloadStateChanged?.Invoke(bIsReloading);
             }
-        }  
-        else if(ElapsedReloadTime >= WeaponDefinition.ReloadTime)
+        }
+        else if (ElapsedReloadTime >= WeaponDefinition.ReloadTime)
         {
             ReloadWeapon();
         }
@@ -77,7 +82,6 @@ public class FireWeaponComponent : MonoBehaviour
         ElapsedReloadTime = 0;
         //Invoke Delegates
         OnReloadStateChanged?.Invoke(bIsReloading);
-
     }
 
     void Shoot()

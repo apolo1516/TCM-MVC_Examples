@@ -20,4 +20,6 @@ public class ReloadTextController : MonoBehaviour
     {
         Text.enabled = bShowText;
     }
+
+
 }
